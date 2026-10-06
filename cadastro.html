@@ -1,36 +1,63 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - OLX</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cadastro - Compraê</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <h1>Compraê</h1>
-    <a href="index.html">Voltar</a>
+<div class="logo">Compraê</div>
+<nav>
+<a href="index.html">Início</a>
+<a href="login.html">Login</a>
+<a href="cadastro.html">Cadastro</a>
+<a href="index.html#empresa">Sobre</a>
+<a href="index.html#clientes">Clientes</a>
+</nav>
 </header>
 
-<main class="formulario">
-    <h2>Crie sua conta</h2>
+<main class="pagina-form">
 
-    <form onsubmit="cadastrar(event)">
-        <label>Nome:</label>
-        <input type="text" id="nome" required>
+<section class="formulario">
+<h1>Criar conta</h1>
+<p>Preencha seus dados para entrar no Compraê.</p>
 
-        <label>E-mail:</label>
-        <input type="email" id="email" required>
+<form id="formCadastro">
 
-        <label>Senha:</label>
-        <input type="password" id="senha" required>
+<input type="text" id="nomeCadastro" placeholder="Nome completo" required>
 
-        <button type="submit">Cadastrar</button>
-    </form>
+<input type="text" id="cpfCadastro" placeholder="CPF" required>
 
-    <p>Já possui uma conta? <a href="login.html">Entrar</a></p>
+<input type="text" id="enderecoCadastro" placeholder="Endereço" required>
+
+<input type="email" id="emailCadastro" placeholder="Email" required>
+
+<input type="password" id="senhaCadastro" placeholder="Senha" required>
+
+<input type="password" id="confirmarSenha" placeholder="Confirmar senha" required>
+
+<button type="submit" class="botao">Cadastrar</button>
+
+<p id="mensagemCadastro"></p>
+
+</form>
+
+<p>Já possui conta? <a href="login.html">Entrar</a></p>
+
+<a href="index.html" class="botao botao-secundario">Voltar</a>
+
+</section>
+
 </main>
+
+<footer>
+<p id="dataAtual"></p>
+<p>Todos os direitos reservados.</p>
+<p>Desenvolvido por Guilherme S., GN.</p>
+</footer>
 
 <script src="script.js"></script>
 </body>

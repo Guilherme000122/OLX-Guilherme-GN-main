@@ -1,332 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Anúncios - Compraê</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Compraê - Produtos</title>
+<link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-    <header>
+<header>
+<div class="logo">Compraê</div>
 
-        <h1>Compraê</h1>
+<nav>
+<a href="site.html">Início</a>
+<a href="#produtos">Produtos</a>
+<a href="#publicar">Publicar</a>
+<button type="button" id="botaoSair" class="botao-sair">Sair</button>
+</nav>
+</header>
 
-        <nav>
-            <a href="index.html">Início</a>
-            <a href="login.html">Login</a>
-            
-            <button onclick="mostrarAnuncio()">
-                + Anunciar produto
-            </button>
-        </nav>
+<main class="site-main">
 
-    </header>
+<section class="boas-vindas">
+<h1>Olá, <span id="nomeUsuario"></span>!</h1>
+<p>Encontre produtos ou publique algo para vender.</p>
+</section>
 
+<section id="publicar" class="formulario">
 
-    <main>
+<h2>Publicar produto</h2>
 
-        <section class="busca">
+<form id="formProduto">
 
-            <h2>Produtos à venda</h2>
+<input type="text" id="nomeProduto" placeholder="Nome do produto" required>
 
-            <input
-                type="text"
-                id="pesquisa"
-                placeholder="O que você está procurando?"
-                onkeyup="pesquisar()"
-            >
+<input type="number" id="precoProduto" placeholder="Preço" min="0" step="0.01" required>
 
-        </section>
+<select id="tipoProduto" required>
+<option value="">Categoria</option>
+<option value="Roupas">Roupas</option>
+<option value="Calçados">Calçados</option>
+<option value="Acessórios">Acessórios</option>
+<option value="Outros">Outros</option>
+</select>
 
+<input type="file" id="imagemProduto" accept="image/*" required>
 
-        <!-- PRODUTOS -->
+<button type="submit" class="botao">Publicar produto</button>
 
-        <section class="anuncios" id="anuncios">
+<p id="mensagemProduto"></p>
 
+</form>
 
-            <div class="produto">
+</section>
 
-                <img src="iphone13.webp" alt="iPhone 13">
+<section id="produtos" class="produtos">
 
-                <h3>iPhone 13</h3>
+<h2>Produtos anunciados</h2>
 
-                <p>Celular usado em ótimo estado.</p>
+<input type="search" id="buscaProdutos" placeholder="Pesquisar produto ou categoria...">
 
-                <strong>R$ 2.100</strong>
+<div id="listaProdutos" class="lista-produtos"></div>
 
-                <span>📍 Belo Horizonte - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
+</section>
 
-            </div>
+</main>
 
+<footer>
+<p id="dataAtual"></p>
+<p>Todos os direitos reservados.</p>
+<p>Desenvolvido por Guilherme S., GN.</p>
+</footer>
 
-            <div class="produto">
-
-                <img src="notebook.png" alt="Notebook Dell">
-
-                <h3>Notebook Dell</h3>
-
-                <p>Notebook para estudos e trabalho.</p>
-
-                <strong>R$ 2.100</strong>
-
-                <span>📍 Contagem - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="bicicleta.webp" alt="Bicicleta">
-
-                <h3>Bicicleta</h3>
-
-                <p>Bicicleta aro 29, pouco usada.</p>
-
-                <strong>R$ 900</strong>
-
-                <span>📍 Betim - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="playstation5.webp" alt="PlayStation 5">
-
-                <h3>PlayStation 5</h3>
-
-                <p>Console com controle e jogos.</p>
-
-                <strong>R$ 3.200</strong>
-
-                <span>📍 Nova Lima - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="tv.webp" alt="Smart TV">
-
-                <h3>Smart TV 50"</h3>
-
-                <p>Smart TV 4K em ótimo estado.</p>
-
-                <strong>R$ 1.800</strong>
-
-                <span>📍 Belo Horizonte - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="sofa.webp" alt="Sofá">
-
-                <h3>Sofá 3 Lugares</h3>
-
-                <p>Sofá confortável e pouco usado.</p>
-
-                <strong>R$ 2.000</strong>
-
-                <span>📍 Contagem - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="geladeira.jpg" alt="Geladeira">
-
-                <h3>Geladeira</h3>
-
-                <p>Geladeira em ótimo estado.</p>
-
-                <strong>R$ 1.600</strong>
-
-                <span>📍 Betim - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-                
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="mesa.webp" alt="Mesade cozinha">
-
-                <h3>Mesa de cozinha</h3>
-
-                <p>Mesa para computador e estudos.</p>
-
-                <strong>R$ 350</strong>
-
-                <span>📍 Belo Horizonte - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="camera.jpg" alt="Câmera Fotográfica">
-
-                <h3>Câmera Fotográfica</h3>
-
-                <p>Câmera digital em ótimo estado.</p>
-
-                <strong>R$ 1.200</strong>
-
-                <span>📍 Nova Lima - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="airfryer.png" alt="Air Fryer">
-
-                <h3>Air Fryer</h3>
-
-                <p>Air Fryer pouco usada.</p>
-
-                <strong>R$ 280</strong>
-
-                <span>📍 Contagem - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="monitor.webp" alt="Monitor">
-
-                <h3>Monitor 24"</h3>
-
-                <p>Monitor Full HD para computador.</p>
-
-                <strong>R$ 600</strong>
-
-                <span>📍 Belo Horizonte - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-            </div>
-
-
-            <div class="produto">
-
-                <img src="samsung.webp" alt="Samsung Galaxy">
-
-                <h3>Samsung Galaxy</h3>
-
-                <p>Celular em ótimo estado de conservação.</p>
-
-                <strong>R$ 1.300</strong>
-
-                <span>📍 Betim - MG</span>
-                <br>
-                <button onclick="mostrarAnuncio()">
-                Comprar
-            </button>
-
-            </div>
-
-
-        </section>
-
-
-        <!-- FORMULÁRIO -->
-
-        <section
-            id="formAnuncio"
-            class="novo-anuncio"
-            style="display:none;"
-        >
-
-            <h2>Publicar anúncio</h2>
-
-            <input
-                type="text"
-                id="produtoNome"
-                placeholder="Nome do produto"
-            >
-
-            <input
-                type="text"
-                id="produtoPreco"
-                placeholder="Preço"
-            >
-
-            <textarea
-                id="produtoDescricao"
-                placeholder="Descrição do produto"
-            ></textarea>
-
-            <input
-                type="text"
-                id="produtoCidade"
-                placeholder="Cidade"
-            >
-
-            <button onclick="publicarAnuncio()">
-                Publicar
-            </button>
-
-        </section>
-
-    </main>
-
-
-    <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
-
 </html>

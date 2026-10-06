@@ -1,258 +1,425 @@
-// BOTÃO DE ABRIR LOGIN
+const $=id=>document.getElementById(id);
 
-const botaoLogin = document.getElementById("botaoLogin");
+if($("dataAtual")){
+$("dataAtual").textContent="Data: "+new Date().toLocaleDateString("pt-BR");
+}
 
-const modalLogin = document.getElementById("modalLogin");
+/* MENUS */
 
-const fechar = document.getElementById("fechar");
+function abrirMenu(botao,submenu){
+const b=$(botao);
+const s=$(submenu);
 
+if(b&&s){
+b.onclick=function(e){
+e.stopPropagation();
+s.classList.toggle("ativo");
+};
+}
+}
 
-// Abrir janela
+abrirMenu("btn-sobre","menu-vertical-sobre");
+abrirMenu("btn-contato","menu-vertical-contato");
 
-botaoLogin.addEventListener("click", function () {
+document.addEventListener("click",function(){
+const sobre=$("menu-vertical-sobre");
+const contato=$("menu-vertical-contato");
 
-    modalLogin.style.display = "flex";
+if(sobre)sobre.classList.remove("ativo");
+if(contato)contato.classList.remove("ativo");
+});
+
+if($("linkTelefone")){
+$("linkTelefone").onclick=function(e){
+e.preventDefault();
+alert("Telefone: (32) 99999-9999");
+};
+}
+
+/* CADASTRO */
+
+const formCadastro=$("formCadastro");
+
+if(formCadastro){
+
+formCadastro.onsubmit=function(e){
+
+e.preventDefault();
+
+const nome=$("nomeCadastro").value.trim();
+const cpf=$("cpfCadastro").value.trim();
+const endereco=$("enderecoCadastro").value.trim();
+const email=$("emailCadastro").value.trim().toLowerCase();
+const senha=$("senhaCadastro").value;
+const confirmar=$("confirmarSenha").value;
+const msg=$("mensagemCadastro");
+
+if(senha!==confirmar){
+msg.textContent="As senhas não são iguais.";
+msg.style.color="red";
+return;
+}
+
+if(localStorage.getItem("usuario_"+email)){
+msg.textContent="Este email já está cadastrado.";
+msg.style.color="red";
+return;
+}
+
+const usuario={
+nome:nome,
+cpf:cpf,
+endereco:endereco,
+email:email,
+senha:senha
+};
+
+localStorage.setItem("usuario_"+email,JSON.stringify(usuario));
+localStorage.setItem("usuarioLogado",JSON.stringify(usuario));
+
+let usuarios=JSON.parse(localStorage.getItem("usuariosComprae"))||[];
+
+usuarios.push(usuario);
+
+localStorage.setItem("usuariosComprae",JSON.stringify(usuarios));
+
+msg.textContent="Cadastro realizado! Entrando...";
+msg.style.color="green";
+
+setTimeout(function(){
+window.location.href="site.html";
+},500);
+
+};
+
+}
+
+/* LOGIN */
+
+const formLogin=$("formLogin");
+
+if(formLogin){
+
+formLogin.onsubmit=function(e){
+
+e.preventDefault();
+
+const email=$("emailLogin").value.trim().toLowerCase();
+const senha=$("senhaLogin").value;
+const msg=$("mensagemLogin");
+
+const dados=localStorage.getItem("usuario_"+email);
+
+if(!dados){
+msg.textContent="Email ou senha incorretos.";
+msg.style.color="red";
+return;
+}
+
+const usuario=JSON.parse(dados);
+
+if(usuario.senha!==senha){
+msg.textContent="Email ou senha incorretos.";
+msg.style.color="red";
+return;
+}
+
+localStorage.setItem("usuarioLogado",JSON.stringify(usuario));
+
+msg.textContent="Login realizado! Entrando...";
+msg.style.color="green";
+
+setTimeout(function(){
+window.location.href="site.html";
+},500);
+
+};
+
+}
+
+/* PROTEÇÃO DO SITE */
+
+if(
+location.pathname.endsWith("site.html")&&
+!localStorage.getItem("usuarioLogado")
+){
+window.location.href="login.html";
+}
+
+/* MOSTRAR USUÁRIO */
+
+const usuarioLogado=JSON.parse(
+localStorage.getItem("usuarioLogado")||"null"
+);
+
+if($("nomeUsuario")&&usuarioLogado){
+$("nomeUsuario").textContent=usuarioLogado.nome;
+}
+
+/* SAIR */
+
+if($("botaoSair")){
+
+$("botaoSair").onclick=function(){
+
+localStorage.removeItem("usuarioLogado");
+
+window.location.href="index.html";
+
+};
+
+}
+
+/* PUBLICAR PRODUTO */
+
+const formProduto=$("formProduto");
+
+if(formProduto){
+
+formProduto.onsubmit=function(e){
+
+e.preventDefault();
+
+const usuario=JSON.parse(
+localStorage.getItem("usuarioLogado")
+);
+
+const arquivo=$("imagemProduto").files[0];
+const msg=$("mensagemProduto");
+
+if(!arquivo){
+msg.textContent="Escolha uma imagem.";
+msg.style.color="red";
+return;
+}
+
+const leitor=new FileReader();
+
+leitor.onload=function(){
+
+const produto={
+id:Date.now(),
+nome:$("nomeProduto").value.trim(),
+preco:Number($("precoProduto").value),
+categoria:$("tipoProduto").value,
+imagem:leitor.result,
+vendedor:usuario.nome,
+emailVendedor:usuario.email,
+comprado:false,
+comprador:""
+};
+
+let produtos=JSON.parse(
+localStorage.getItem("produtosComprae")
+)||[];
+
+produtos.push(produto);
+
+localStorage.setItem(
+"produtosComprae",
+JSON.stringify(produtos)
+);
+
+formProduto.reset();
+
+msg.textContent="Produto publicado com sucesso!";
+msg.style.color="green";
+
+mostrarProdutos();
+
+};
+
+leitor.readAsDataURL(arquivo);
+
+};
+
+}
+
+/* MOSTRAR PRODUTOS */
+
+function mostrarProdutos(){
+
+const lista=$("listaProdutos");
+
+if(!lista)return;
+
+const usuario=JSON.parse(
+localStorage.getItem("usuarioLogado")
+);
+
+if(!usuario)return;
+
+const produtos=JSON.parse(
+localStorage.getItem("produtosComprae")
+)||[];
+
+const busca=$("buscaProdutos")
+?$("buscaProdutos").value.toLowerCase()
+:"";
+
+lista.innerHTML="";
+
+produtos
+.filter(function(p){
+return p.nome.toLowerCase().includes(busca)||
+p.categoria.toLowerCase().includes(busca);
+})
+.forEach(function(p){
+
+const card=document.createElement("article");
+
+card.className="produto-card";
+
+let botoes="";
+
+if(p.comprado){
+
+botoes='<button class="botao" disabled>Produto vendido</button>';
+
+}else if(p.emailVendedor===usuario.email){
+
+botoes='<button class="botao-sair" onclick="excluirProduto('+p.id+')">Excluir</button>';
+
+}else{
+
+botoes='<button class="botao" onclick="comprarProduto('+p.id+')">Comprar</button>';
+
+botoes+='<button class="botao botao-secundario" onclick="tenhoInteresse('+p.id+')">Interesse</button>';
+
+}
+
+card.innerHTML=
+'<img src="'+p.imagem+'" alt="'+p.nome+'">'+
+'<div class="produto-info">'+
+'<span class="categoria">'+p.categoria+'</span>'+
+'<h3>'+p.nome+'</h3>'+
+'<p class="preco">R$ '+p.preco.toFixed(2).replace(".",",")+'</p>'+
+'<p>Vendedor: <strong>'+p.vendedor+'</strong></p>'+
+'<div class="botoes-produto">'+botoes+'</div>'+
+'</div>';
+
+lista.appendChild(card);
 
 });
 
+}
 
-// Fechar janela
+/* PESQUISA */
 
-fechar.addEventListener("click", function () {
+if($("buscaProdutos")){
 
-    modalLogin.style.display = "none";
+$("buscaProdutos").oninput=function(){
+mostrarProdutos();
+};
 
+}
+
+/* COMPRAR */
+
+function comprarProduto(id){
+
+let produtos=JSON.parse(
+localStorage.getItem("produtosComprae")
+)||[];
+
+const produto=produtos.find(function(p){
+return p.id===id;
 });
 
+const usuario=JSON.parse(
+localStorage.getItem("usuarioLogado")
+);
 
-// Fechar clicando fora
+if(!produto)return;
 
-modalLogin.addEventListener("click", function (event) {
+if(produto.emailVendedor===usuario.email){
+alert("Você não pode comprar seu próprio produto.");
+return;
+}
 
-    if (event.target === modalLogin) {
+if(produto.comprado){
+alert("Este produto já foi vendido.");
+return;
+}
 
-        modalLogin.style.display = "none";
+if(!confirm("Deseja comprar "+produto.nome+"?"))return;
 
-    }
+produto.comprado=true;
+produto.comprador=usuario.email;
 
+localStorage.setItem(
+"produtosComprae",
+JSON.stringify(produtos)
+);
+
+alert("Compra realizada com sucesso!");
+
+mostrarProdutos();
+
+}
+
+/* INTERESSE */
+
+function tenhoInteresse(id){
+
+const produtos=JSON.parse(
+localStorage.getItem("produtosComprae")
+)||[];
+
+const produto=produtos.find(function(p){
+return p.id===id;
 });
 
+if(!produto)return;
 
-// ÁREAS
+const assunto=encodeURIComponent(
+"Tenho interesse em "+produto.nome
+);
 
-const areaLogin = document.getElementById("areaLogin");
+const texto=encodeURIComponent(
+"Olá! Tenho interesse no produto "+
+produto.nome+
+" anunciado no Compraê."
+);
 
-const areaCadastro = document.getElementById("areaCadastro");
+window.location.href=
+"mailto:"+produto.emailVendedor+
+"?subject="+assunto+
+"&body="+texto;
 
+}
 
-// Ir para cadastro
+/* EXCLUIR */
 
-document.getElementById("irCadastro").addEventListener("click", function (event) {
+function excluirProduto(id){
 
-    event.preventDefault();
+let produtos=JSON.parse(
+localStorage.getItem("produtosComprae")
+)||[];
 
-    areaLogin.style.display = "none";
+const usuario=JSON.parse(
+localStorage.getItem("usuarioLogado")
+);
 
-    areaCadastro.style.display = "block";
-
+const produto=produtos.find(function(p){
+return p.id===id;
 });
 
+if(!produto||produto.emailVendedor!==usuario.email)return;
 
-// Voltar para login
+if(!confirm("Deseja excluir este produto?"))return;
 
-document.getElementById("irLogin").addEventListener("click", function (event) {
-
-    event.preventDefault();
-
-    areaCadastro.style.display = "none";
-
-    areaLogin.style.display = "block";
-
+produtos=produtos.filter(function(p){
+return p.id!==id;
 });
 
+localStorage.setItem(
+"produtosComprae",
+JSON.stringify(produtos)
+);
 
-// CADASTRAR
+mostrarProdutos();
 
-document.getElementById("cadastrar").addEventListener("click", function () {
+}
 
-    const nome = document.getElementById("nomeCadastro").value.trim();
-
-    const email = document.getElementById("emailCadastro").value.trim().toLowerCase();
-
-    const senha = document.getElementById("senhaCadastro").value;
-
-    const confirmarSenha = document.getElementById("confirmarSenha").value;
-
-    const mensagem = document.getElementById("mensagemCadastro");
-
-
-    // Verificar campos
-
-    if (nome === "" || email === "" || senha === "") {
-
-        mensagem.textContent = "Preencha todos os campos.";
-
-        mensagem.style.color = "red";
-
-        return;
-    }
-
-
-    // Conferir senha
-
-    if (senha !== confirmarSenha) {
-
-        mensagem.textContent = "As senhas não são iguais.";
-
-        mensagem.style.color = "red";
-
-        return;
-    }
-
-
-    // Verificar se já existe
-
-    const usuarioExistente = localStorage.getItem("usuario_" + email);
-
-
-    if (usuarioExistente) {
-
-        mensagem.textContent = "Esse e-mail já está cadastrado.";
-
-        mensagem.style.color = "red";
-
-        return;
-    }
-
-
-    // Criar usuário
-
-    const usuario = {
-
-        nome: nome,
-
-        email: email,
-
-        senha: senha
-
-    };
-
-
-    // Salvar
-
-    localStorage.setItem(
-        "usuario_" + email,
-        JSON.stringify(usuario)
-    );
-
-
-    mensagem.textContent = "Cadastro realizado com sucesso!";
-
-    mensagem.style.color = "green";
-
-
-    // Limpar campos
-
-    document.getElementById("nomeCadastro").value = "";
-
-    document.getElementById("emailCadastro").value = "";
-
-    document.getElementById("senhaCadastro").value = "";
-
-    document.getElementById("confirmarSenha").value = "";
-
-
-    // Voltar para login depois de 1 segundo
-
-    setTimeout(function () {
-
-        areaCadastro.style.display = "none";
-
-        areaLogin.style.display = "block";
-
-        mensagem.textContent = "";
-
-    }, 1000);
-
-});
-
-
-// ENTRAR
-
-document.getElementById("entrar").addEventListener("click", function () {
-
-    const email = document.getElementById("emailLogin").value.trim().toLowerCase();
-
-    const senha = document.getElementById("senhaLogin").value;
-
-    const mensagem = document.getElementById("mensagemLogin");
-
-
-    // Procurar usuário
-
-    const dados = localStorage.getItem("usuario_" + email);
-
-
-    // Usuário não existe
-
-    if (!dados) {
-
-        mensagem.textContent =
-            "Usuário não encontrado. Faça seu cadastro.";
-
-        mensagem.style.color = "red";
-
-        return;
-    }
-
-
-    // Converter dados
-
-    const usuario = JSON.parse(dados);
-
-
-    // Conferir senha
-
-    if (usuario.senha !== senha) {
-
-        mensagem.textContent =
-            "Senha incorreta.";
-
-        mensagem.style.color = "red";
-
-        return;
-    }
-
-
-    // Salvar login
-
-    localStorage.setItem(
-        "usuarioLogado",
-        JSON.stringify(usuario)
-    );
-
-
-    mensagem.textContent =
-        "Login realizado com sucesso!";
-
-    mensagem.style.color = "green";
-
-
-    // Alterar botão
-
-    setTimeout(function () {
-
-        modalLogin.style.display = "none";
-
-        botaoLogin.textContent =
-            "Olá, " + usuario.nome;
-
-        document.getElementById("emailLogin").value = "";
-
-        document.getElementById("senhaLogin").value = "";
-
-        mensagem.textContent = "";
-
-    }, 800);
-
-});
+mostrarProdutos();

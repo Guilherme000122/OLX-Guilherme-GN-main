@@ -1,130 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Compraê</title>
-
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Compraê</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<script src="script.js"></script>
 <body>
 
-    <header>
-        <h1>Compraê</h1>
+<header>
+<div class="logo">Compraê</div>
+<nav>
+<a href="index.html">Início</a>
+<a href="login.html">Login</a>
+<a href="cadastro.html">Cadastro</a>
 
-        <button id="botaoLogin">
-            Entrar / Cadastrar
-        </button>
-    </header>
+<div class="menu">
+<button type="button" id="btn-sobre">Sobre ▾</button>
+<div id="menu-vertical-sobre" class="submenu">
+<a href="#empresa">Empresa</a>
+<a href="#clientes">Clientes</a>
+</div>
+</div>
 
+<div class="menu">
+<button type="button" id="btn-contato">Contato ▾</button>
+<div id="menu-vertical-contato" class="submenu">
+<a href="#" id="linkTelefone">Telefones</a>
+<a href="mailto:contato@comprae.com">Email</a>
+</div>
+</div>
+</nav>
+</header>
 
-    <main>
-        <h2>Bem-vindo ao Compraê!</h2>
+<main>
 
-        <p>
-            Compre, venda e encontre produtos de forma fácil.
-        </p>
-    </main>
+<section class="hero">
+<div class="hero-content">
+<h1>Compraê</h1>
+<p>Compre, venda e encontre produtos de moda de um jeito simples e rápido.</p>
+<a href="cadastro.html" class="botao">Criar minha conta</a>
+</div>
+</section>
 
+<section id="empresa" class="secao">
+<h2>Sobre a empresa</h2>
+<p>O Compraê é uma plataforma criada para facilitar a compra e venda de roupas, calçados e acessórios.</p>
+</section>
 
-    <!-- JANELA DE LOGIN -->
-    <div id="modalLogin" class="modal">
+<section id="clientes" class="secao">
+<h2>Nossos clientes</h2>
+<p>Qualquer pessoa pode anunciar seus produtos e encontrar novas oportunidades de compra.</p>
+</section>
 
-        <div class="caixa">
+<section class="secao">
+<h2>Entre para o Compraê</h2>
+<p>Cadastre-se gratuitamente e comece a publicar seus produtos.</p>
+<a href="cadastro.html" class="botao">Cadastrar</a>
+</section>
 
-            <button id="fechar" class="fechar">×</button>
+</main>
 
+<footer>
+<p id="dataAtual"></p>
+<p>Todos os direitos reservados.</p>
+<p>Desenvolvido por Guilherme S., GN.</p>
+</footer>
 
-            <!-- LOGIN -->
-
-            <div id="areaLogin">
-
-                <h2>Entrar</h2>
-
-                <input
-                    type="email"
-                    id="emailLogin"
-                    placeholder="E-mail"
-                >
-
-                <input
-                    type="password"
-                    id="senhaLogin"
-                    placeholder="Senha"
-                >
-
-                <button id="entrar">
-                    Entrar
-                </button>
-
-                <p id="mensagemLogin"></p>
-
-                <p>
-                    Não possui uma conta?
-                    <a href="#" id="irCadastro">
-                        Cadastre-se
-                    </a>
-                </p>
-
-            </div>
-
-
-            <!-- CADASTRO -->
-
-            <div id="areaCadastro" style="display: none;">
-
-                <h2>Criar conta</h2>
-
-                <input
-                    type="text"
-                    id="nomeCadastro"
-                    placeholder="Nome"
-                >
-
-                <input
-                    type="email"
-                    id="emailCadastro"
-                    placeholder="E-mail"
-                >
-
-                <input
-                    type="password"
-                    id="senhaCadastro"
-                    placeholder="Senha"
-                >
-
-                <input
-                    type="password"
-                    id="confirmarSenha"
-                    placeholder="Confirmar senha"
-                >
-
-                <button id="cadastrar">
-                    Criar conta
-                </button>
-
-                <p id="mensagemCadastro"></p>
-
-                <p>
-                    Já possui uma conta?
-                    <a href="#" id="irLogin">
-                        Entrar
-                    </a>
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- IMPORTANTE: deixar o script no final -->
-    <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
-
 </html>
